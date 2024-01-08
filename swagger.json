@@ -1,0 +1,692 @@
+{
+    "openapi":"3.0.0",
+    "info":{
+        "title":"PostAway social media Rest Api using jwt cookie based Authentication",
+        "description":"PostAway social media rest ApI.As user logIn,jwt token get generated and implicitly sent in cookies(Users don't have to pass jwt token in authorization section of header again and again).While calling other apis ,jwt token from cookie will be sent to the server for user verification.",
+        "version":"1.0.0"
+    },
+    "servers":[
+        {
+            "url":"http://localhost:5000"
+        }
+    ],
+    
+    "security":{
+        "cookieAuth":[]
+    },
+    "paths":{
+        "/api/users/signup":{
+            "post":{
+                "tags":["Users"],
+                "summary":"User Register",
+                "description":"User SignUp api",
+                "requestBody":{
+                    "content":{
+                        "application/json":{
+                            "schema":{
+                                "type":"object",
+                                "properties":{
+                                    "name":{
+                                        "type":"string"
+                                    },
+                                    "password":{
+                                        "type":"string"
+                                    },
+                                    "email":{
+                                        "type":"string"
+                                    },
+                                    "gender":{
+                                        "type":"string"
+                                    },
+                                    "phone":{
+                                        "type":"string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses":{
+                    "200":{
+                        "description":"Ok"
+                    },
+                    "400":{
+                        "description":"Invalid Credentials"
+                    }
+                }
+
+            }
+        },
+        "/api/users/signin":{
+            "post":{
+                "tags":["Users"],
+                "summary":"User SignIn",
+                "description":"User SignIn api",
+                "requestBody":{
+                    "content":{
+                        "application/json":{
+                            "schema":{
+                                "type":"object",
+                                "properties":{
+                                    "email":{
+                                        "type":"string"
+                                    }  ,
+                                    "password":{
+                                        "type":"string"
+                                    } 
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses":{
+                    "200":{
+                        "description":"Ok",
+                        "headers":{
+                            "Set-Cookie":{
+                                "type":"string"
+                            }
+                        }
+                    },
+                    "400":{
+                        "description":"Invalid Credentials"
+                    }
+                }
+
+            }
+        },
+        "/api/users/logout":{
+            "get":{
+                "tags":["Users"],
+                "summary":"logout Api",
+                "description":"user logout api",
+                "security":{
+                    "cookieAuth":[]
+                },
+                "responses":{
+                    "200":{
+                        "description":"Ok"
+                    },
+                    "400":{
+                        "description":"unauthorised"
+                    }
+                }
+            }
+        },
+        "/api/users/logout-all-devices":{
+            "get":{
+                "tags":["Users"],
+                "summary":"logout from all devices Api",
+                "description":"user logout from all devices api",
+                "security":{
+                    "cookieAuth":[]
+                },
+                "responses":{
+                    "200":{
+                        "description":"Ok"
+                    },
+                    "400":{
+                        "description":"unauthorised"
+                    }
+                }
+            }
+        },
+        "/api/otp/create-otp":{
+            "post":{
+                "tags":["OTP&Password-Reset"],
+                "summary":"otp-creation api",
+                "description":"create otp to verify youe mail for password reset",
+                "requestBody":{
+                    "content":{
+                        "application/json":{
+                            "schema":{
+                                "type":"object",
+                                "properties":{
+                                    "email":{
+                                        "type":"string"
+                                    }
+                                   
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses":{
+                    "200":{
+                        "description":"Ok"
+                       
+                    },
+                    "400":{
+                        "description":"invalid email"
+                    }
+                }
+
+            }
+        },
+        "/api/otp/verify-otp":{
+            "post":{
+                "tags":["OTP&Password-Reset"],
+                "summary":"otp verification api",
+                "description":"after otp creation,user can verify their otp",
+                "requestBody":{
+                    "content":{
+                        "application/json":{
+                            "schema":{
+                                "type":"object",
+                                "properties":{
+                                    "otp":{
+                                        "type":"string"
+                                    }  
+                                    
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses":{
+                    "200":{
+                        "description":"Ok",
+                        "headers":{
+                            "Set-Cookie":{
+                                "type":"string"
+                            }
+                        }
+                    },
+                    "400":{
+                        "description":"Invalid otp"
+                    }
+                }
+
+            }
+        },
+        "/api/otp/reset-password":{
+            "put":{
+                "tags":["OTP&Password-Reset"],
+                "summary":"password-rest api",
+                "description":"useers can reset their password",
+                "requestBody":{
+                    "content":{
+                        "application/json":{
+                            "schema":{
+                                "type":"object",
+                                "properties":{
+                                    "newPassword":{
+                                        "type":"string"
+                                    }  
+                                    
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses":{
+                    "200":{
+                        "description":"Ok"
+                    },
+                    "400":{
+                        "description":"Invalid otp"
+                    }
+                }
+
+            }
+        },
+        "/api/posts/create-post":{
+            "post":{
+                "tags":["Posts"],
+                "summary":"User posts api",
+                "description":"User posts api",
+                "requestBody":{
+                    "content":{
+                        "multipart/form-data":{
+                            "schema":{
+                                "type":"object",
+                                "properties":{
+                                    "caption":{
+                                        "type":"string"
+                                    },
+                                    "image":{
+                                        "type":"string",
+                                        "format":"binary"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses":{
+                    "200":{
+                        "description":"Ok",
+                        "headers":{
+                            "Set-Cookie":{
+                                "type":"string"
+                            }
+                        }
+                    },
+                    "400":{
+                        "description":"post creation failed!!!"
+                    }
+                }
+
+            }
+        },
+        "/api/posts/update/{postId}":{
+            "put":{
+                "tags":["Posts"],
+                "summary":"User posts update api",
+                "description":"User posts update api",
+                "parameters":[{
+                    "in":"path",
+                    "name":"postId",
+                    "required":"true",
+                    "schema":{
+                        "type":"string",
+                        "minimum":"1"
+                    },
+                    "description":"users postId"
+                }
+                ]
+                ,
+                "requestBody":{
+                    "content":{
+                        "multipart/form-data":{
+                            "schema":{
+                                "type":"object",
+                                "properties":{
+                                    "caption":{
+                                        "type":"string"
+                                    },
+                                    "image":{
+                                        "type":"string",
+                                        "format":"binary"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses":{
+                    "200":{
+                        "description":"ok"
+                    },
+                    "400":{
+                        "description":"post Updation failed!!!"
+                    }
+                }
+
+            }
+        },
+        "/api/posts/{postId}":{
+            "delete":{
+                "tags":["Posts"],
+                "summary":"User posts delete api",
+                "description":"User posts delete api",
+                "parameters":[{
+                    "in":"path",
+                    "name":"postId",
+                    "required":"true",
+                    "schema":{
+                        "type":"string",
+                        "minimum":"1"
+                    },
+                    "description":"users postId"
+                }
+                ]
+                ,
+                "responses":{
+                    "200":{
+                        "description":"ok"
+                    },
+                    "400":{
+                        "description":"post deletion failed!!!"
+                    }
+                }
+
+            }
+        },
+        "/api/posts/all":{
+            "get":{
+                "tags":["Posts"],
+                "summary":"Get all User Post",
+                "description":"Get Users Post",
+                "responses":{
+                    "200":{
+                        "description":"ok"
+                    },
+                    "400":{
+                        "description":"Failed to Get users posts!!!"
+                    }
+                }
+
+            }
+        },
+        "/api/posts/get/{postId}":{
+            "get":{
+                "tags":["Posts"],
+                "summary":"Get User single posts",
+                "description":"get users single posts",
+                "parameters":[{
+                    "in":"path",
+                    "name":"postId",
+                    "required":"true",
+                    "schema":{
+                        "type":"string",
+                        "minimum":"1"
+                    },
+                    "description":"users postId"
+                }
+                ]
+                ,
+                "responses":{
+                    "200":{
+                        "description":"ok"
+                    },
+                    "400":{
+                        "description":"post retrieval failed!!!"
+                    }
+                }
+
+            }
+        },
+        "/api/posts/get-all-by-userId":{
+            "get":{
+                "tags":["Posts"],
+                "summary":"get users all posts api",
+                "description":"Get users all posts."
+                ,
+                "responses":{
+                    "200":{
+                        "description":"ok"
+                    },
+                    "400":{
+                        "description":"failed to get users all post.!!!"
+                    }
+                }
+
+            }
+        },
+        "/api/comments/{postId}":{
+            "post":{
+                "tags":["Comments"],
+                "summary":"User add comment api ",
+                "description":"User can comment on any posts.",
+                "parameters":[{
+                    "in":"path",
+                    "name":"postId",
+                    "required":"true",
+                    "schema":{
+                        "type":"string",
+                        "minimum":"1"
+                    },
+                    "description":"posts postId"
+                }
+                ]
+                ,
+                "requestBody":{
+                    "content":{
+                        "application/json":{
+                            "schema":{
+                                "type":"object",
+                                "properties":{
+                                    "comment":{
+                                        "type":"string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses":{
+                    "201":{
+                        "description":"ok"
+                    },
+                    "400":{
+                        "description":"failed to comment on any posts!!!"
+                    }
+                }
+
+            }
+        },
+        "/api/comments/delete/{commentId}":{
+            "delete":{
+                "tags":["Comments"],
+                "summary":"User delete comment api ",
+                "description":"User can delete comment of any posts.",
+                "parameters":[{
+                    "in":"path",
+                    "name":"commentId",
+                    "required":"true",
+                    "schema":{
+                        "type":"string",
+                        "minimum":"1"
+                    },
+                    "description":"commentId"
+                }
+                ]
+                ,
+                "responses":{
+                    "200":{
+                        "description":"ok"
+                    },
+                    "400":{
+                        "description":"failed to delete comment on any posts!!!"
+                    }
+                }
+
+            }
+        },
+        "/api/comments/update/{commentId}":{
+            "put":{
+                "tags":["Comments"],
+                "summary":"User can update comment api ",
+                "description":"User can update  comment on any posts.",
+                "parameters":[{
+                    "in":"path",
+                    "name":"commentId",
+                    "required":"true",
+                    "schema":{
+                        "type":"string",
+                        "minimum":"1"
+                    },
+                    "description":"commentId"
+                }
+                ]
+                ,
+                "requestBody":{
+                    "content":{
+                        "application/json":{
+                            "schema":{
+                                "type":"object",
+                                "properties":{
+                                    "comment":{
+                                        "type":"string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses":{
+                    "201":{
+                        "description":"ok"
+                    },
+                    "400":{
+                        "description":"failed to update comment on any posts!!!"
+                    }
+                }
+
+            }
+        },
+        "/api/comments/get/{postId}":{
+            "get":{
+                "tags":["Comments"],
+                "summary":"User can get their comments api",
+                "description":"User can get comment of any posts.",
+                "parameters":[{
+                    "in":"path",
+                    "name":"postId",
+                    "required":"true",
+                    "schema":{
+                        "type":"string",
+                        "minimum":"1"
+                    },
+                    "description":"posts postId"
+                }
+                ]
+                ,
+                "responses":{
+                    "200":{
+                        "description":"ok"
+                    },
+                    "400":{
+                        "description":"failed to    get comment of any posts!!!"
+                    }
+                }
+
+            }
+        },
+        "/api/likes/get/{postId}":{
+            "get":{
+                "tags":["Likes"],
+                "summary":"Get User Likes api ",
+                "description":"Get User likes of any posts.",
+                "parameters":[{
+                    "in":"path",
+                    "name":"postId",
+                    "required":"true",
+                    "schema":{
+                        "type":"string",
+                        "minimum":"1"
+                    },
+                    "description":"posts postId"
+                }
+                ]
+                ,
+                "responses":{
+                    "200":{
+                        "description":"ok"
+                    },
+                    "400":{
+                        "description":"failed to get likes of any posts!!!"
+                    }
+                }
+
+            }
+        },
+        "/api/likes/{postId}":{
+            "post":{
+                "tags":["Likes"],
+                "summary":"User add comment api ",
+                "description":"User can comment on any posts.",
+                "parameters":[{
+                    "in":"path",
+                    "name":"postId",
+                    "required":"true",
+                    "schema":{
+                        "type":"string",
+                        "minimum":"1"
+                    },
+                    "description":"posts postId"
+                }
+                ]
+                ,
+                "requestBody":{
+                    "content":{
+                        "application/json":{
+                            "schema":{
+                                "type":"object",
+                                "properties":{
+                                    "comment":{
+                                        "type":"string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses":{
+                    "201":{
+                        "description":"ok"
+                    },
+                    "400":{
+                        "description":"failed to comment on any posts!!!"
+                    }
+                }
+
+            }
+        },
+        "/api/friends/toggle-friendship/{friendId}":{
+            "post":{
+                "tags":["FriendShip"],
+                "summary":"User add Friend api ",
+                "description":"User can add friend in  his list.",
+                "parameters":[{
+                    "in":"path",
+                    "name":"friendId",
+                    "required":"true",
+                    "schema":{
+                        "type":"string",
+                        "minimum":"1"
+                    },
+                    "description":"friendId"
+                }
+                ]
+                ,
+                "responses":{
+                    "201":{
+                        "description":"ok"
+                    },
+                    "400":{
+                        "description":"failed to add other users on your friend list !!!"
+                    }
+                }
+
+            }
+        },
+        "/api/friends/get-friends/{userId}":{
+            "get":{
+                "tags":["FriendShip"],
+                "summary":"User connected Friend api ",
+                "description":"Get User  friend in  his list.",
+                "responses":{
+                    "201":{
+                        "description":"ok"
+                    },
+                    "400":{
+                        "description":"failed to add other users on your friend list !!!"
+                    }
+                }
+
+            }
+        }
+
+        
+    
+        
+        
+
+
+
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
