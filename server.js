@@ -1,5 +1,5 @@
 import app from './index.js';
-//import './env_config.js';
+import './env_config.js';
 import { connectionUsingMongoose } from './config/mongodb.config.js';
 
 const port=5000;
